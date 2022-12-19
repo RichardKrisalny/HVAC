@@ -6,6 +6,7 @@ import lombok.*;
 
 @Data
 @NoArgsConstructor
+@Builder
 @AllArgsConstructor
 @EqualsAndHashCode(of="id")
 @Entity
@@ -29,6 +30,7 @@ public class Duct {
     private double price;
     private boolean color;
     @OneToOne
+    @JoinColumn
     private  Measurement measurement;
     private int projectId;
 

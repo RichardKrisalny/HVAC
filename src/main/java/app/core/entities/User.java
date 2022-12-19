@@ -3,6 +3,7 @@ package app.core.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -11,6 +12,7 @@ import java.util.List;
 @EqualsAndHashCode(of="id")
 @Entity
 @ToString(exclude = "projects")
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,4 +22,11 @@ public class User {
     @OneToMany()
     @JoinColumn(name = "userId")
     private List<Project>projects;
+    public void addProject(Project project){
+        if(projects==null){
+            projects=new ArrayList<>();
+        }
+        project.setUserId(this.id);
+        projects.add(project);
+    }
 }

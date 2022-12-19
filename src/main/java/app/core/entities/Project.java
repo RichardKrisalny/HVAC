@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -14,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(of="id")
 @Entity
+@Builder
 @ToString(exclude = "workers , ducts")
 
 public class Project {
@@ -35,4 +37,19 @@ public class Project {
     private LocalDate deadLine;
     private int DegreeOfDifficulty;
     private boolean done;
+
+    public void addDuct(Duct duct){
+        if(ducts == null){
+            ducts=new ArrayList<>();
+        }
+        duct.setProjectId(this.id);
+        ducts.add(duct);
+    }
+    public void addWorker(Worker worker){
+        if(workers == null){
+            workers=new ArrayList<>();
+        }
+        worker.addProject(this);
+        workers.add(worker);
+    }
 }

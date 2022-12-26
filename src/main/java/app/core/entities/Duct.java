@@ -1,8 +1,10 @@
 package app.core.entities;
 
 import app.core.entities.Enums.*;
-import jakarta.persistence.*;
+
 import lombok.*;
+
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor

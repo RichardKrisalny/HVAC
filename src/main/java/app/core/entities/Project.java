@@ -1,10 +1,9 @@
 package app.core.entities;
 
-import app.core.entities.Contact;
-import app.core.entities.Duct;
-import app.core.entities.Worker;
-import jakarta.persistence.*;
 import lombok.*;
+
+import javax.persistence.*;
+
 
 import java.time.LocalDate;
 import java.util.ArrayList;

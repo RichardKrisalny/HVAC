@@ -1,7 +1,9 @@
 package app.core.entities;
 
-import jakarta.persistence.*;
 import lombok.*;
+
+import javax.persistence.*;
+
 
 import java.util.ArrayList;
 import java.util.List;

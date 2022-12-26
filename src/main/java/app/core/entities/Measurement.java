@@ -1,7 +1,13 @@
 package app.core.entities;
 
-import jakarta.persistence.*;
+
+
+import app.core.entities.Enums.*;
+
 import lombok.*;
+
+import javax.persistence.*;
+
 
 @Data
 @NoArgsConstructor

@@ -1,0 +1,30 @@
+
+name: heroku deployment
+
+on:
+  push:
+    branches: [ main ]
+
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Deploy to Heroku
+     # You may pin to the exact commit or the version.
+     # uses: AkhileshNS/heroku-deploy@79ef2ae4ff9b897010907016b268fd0f88561820
+      uses: AkhileshNS/heroku-deploy@v3.12.12
+      with:
+        # This will be used for authentication. You can find it in your heroku homepage account settings
+        heroku_api_key: ${{secrets.DOR_HEROKU_API}}
+    # Email that you use with heroku
+        heroku_email: ${{secrets.HEROKU_EMAIL}}
+    # The appname to use for deploying/updating
+        heroku_app_name: ${{secrets.NAME}}
+
+    # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
+    - name: Update dependency graph
+      uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6

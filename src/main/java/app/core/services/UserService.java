@@ -30,7 +30,7 @@ public class UserService {
             return true;
         }
         else
-            throw new RuntimeException("user not found");
+            return false;
     }
 
 

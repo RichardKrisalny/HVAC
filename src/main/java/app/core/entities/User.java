@@ -1,5 +1,6 @@
 package app.core.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,6 +24,7 @@ public class User {
     private String password;
     @OneToMany()
     @JoinColumn(name = "userId")
+    @JsonIgnore
     private List<Project>projects;
     public void addProject(Project project){
         if(projects==null){

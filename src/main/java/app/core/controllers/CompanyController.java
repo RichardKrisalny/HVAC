@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 
 @CrossOrigin
@@ -43,6 +44,11 @@ public class CompanyController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
+    @GetMapping(value = "/getAllProjects", headers = {HttpHeaders.AUTHORIZATION})
+    public List<Project> getAllProjects(HttpServletRequest req) {
+        User user = (User) req.getAttribute("user");
+       return companyService.getAllProjects(companyRepository.findByUserCredentials_UserName(user.getUserName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the company not found")).getId());
+    }
 
     @GetMapping(value = "/getProjectByName", headers = {HttpHeaders.AUTHORIZATION})
     public Project getProjectByName(String projectName, HttpServletRequest req) {
@@ -55,10 +61,10 @@ public class CompanyController {
     }
 
     @PutMapping(value = "/updateProject", headers = {HttpHeaders.AUTHORIZATION})
-    public Project updateProject(@RequestBody Project project, HttpServletRequest req) {
+    public Project updateProject(@RequestBody Project project,@RequestParam int projectId, HttpServletRequest req) {
         User user = (User) req.getAttribute("user");
         try {
-            return companyService.updateProject(project, companyRepository.findByUserCredentials_UserName(user.getUserName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the company not found")).getId());
+            return companyService.updateProject(project,projectId ,companyRepository.findByUserCredentials_UserName(user.getUserName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the company not found")).getId());
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }

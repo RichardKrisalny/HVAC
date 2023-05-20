@@ -20,7 +20,7 @@ public class Project {
 
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Id
-
+@JsonIgnore
     private int id;
         @OneToOne
         @JoinColumn(name = "manager_id")

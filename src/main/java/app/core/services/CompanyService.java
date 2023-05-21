@@ -3,6 +3,7 @@ import app.core.entities.Company;
 import app.core.entities.Employee;
 import app.core.entities.Project;
 import app.core.exeptions.ServiceException;
+import app.core.repositories.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,25 +31,26 @@ public class CompanyService extends ServiceGlobal {
         return projectRepository.findByCompanyId(companyId);
     }
     public Project updateProject(Project project,int projectId ,int companyId) throws ServiceException {
-        if (!projectRepository.existsById(projectId))
+        if (!projectRepository.existsByIdAndCompanyId(projectId,companyId))
             throw new ServiceException("the project "+project.getName()+" not found");
         userCredentialsRepository.save(project.getClient().getUserCredentials());
         addressRepository.save(project.getClient().getAddress());
         addressRepository.save(project.getAddress());
         clientRepository.save(project.getClient());
-        Company company = companyRepository.findById(companyId).orElseThrow(()->new ServiceException("the company not found"));
-        company.getProjects().removeIf((o -> o.getId()== project.getId()));
-        company.addProject(project);
         project.setId(projectId);
         return projectRepository.save(project);
     }
     public void deleteProject(int projectId,int companyId) throws ServiceException {
         if(!projectRepository.existsByIdAndCompanyId(projectId,companyId))
             throw new ServiceException("the company not found");
-//        companyRepository.findById(companyId).orElseThrow(()->new ServiceException("the company not found")).getProjects().removeIf((o -> o.getId()== projectId));
         projectRepository.deleteById(projectId);
     }
-    public Employee addEmployee(Employee employee,int companyId){
-    return null;
+    public Employee addEmployee(Employee employee,int companyId) throws ServiceException {
+        if(employeeRepository.existsByTZAndCompanyId(employee.getTZ(), companyId))
+            throw new ServiceException("the employee already exists");
+        userCredentialsRepository.save(employee.getUserCredentials());
+        addressRepository.save(employee.getAddress());
+        companyRepository.findById(companyId).orElseThrow(()->new ServiceException("the company not found")).addEmployee(employee);
+        return employeeRepository.save(employee);
         }
 }

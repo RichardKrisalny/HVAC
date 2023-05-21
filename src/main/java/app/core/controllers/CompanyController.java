@@ -1,9 +1,11 @@
 package app.core.controllers;
+import app.core.entities.Employee;
 import app.core.entities.Project;
 
 import app.core.exeptions.ServiceException;
 import app.core.jwt.User;
 import app.core.repositories.CompanyRepository;
+import app.core.repositories.EmployeeRepository;
 import app.core.services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -77,6 +79,15 @@ public class CompanyController {
             companyService.deleteProject(projectId, companyRepository.findByUserCredentials_UserName(user.getUserName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the company not found")).getId());
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+    @PostMapping(value = "/addEmployee", headers = {HttpHeaders.AUTHORIZATION})
+    public Employee addEmployee(@RequestBody Employee employee, HttpServletRequest req) {
+        User user = (User) req.getAttribute("user");
+        try {
+            return companyService.addEmployee(employee, companyRepository.findByUserCredentials_UserName(user.getUserName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the company not found")).getId());
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 }

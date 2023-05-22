@@ -1,9 +1,8 @@
 package app.core.services;
-import app.core.entities.Company;
 import app.core.entities.Employee;
 import app.core.entities.Project;
+import app.core.entities.UserType;
 import app.core.exeptions.ServiceException;
-import app.core.repositories.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,6 +32,7 @@ public class CompanyService extends ServiceGlobal {
     public Project updateProject(Project project,int projectId ,int companyId) throws ServiceException {
         if (!projectRepository.existsByIdAndCompanyId(projectId,companyId))
             throw new ServiceException("the project "+project.getName()+" not found");
+        project.getClient().getUserCredentials().setUserType(UserType.CUSTOMER);
         userCredentialsRepository.save(project.getClient().getUserCredentials());
         addressRepository.save(project.getClient().getAddress());
         addressRepository.save(project.getAddress());
@@ -48,6 +48,7 @@ public class CompanyService extends ServiceGlobal {
     public Employee addEmployee(Employee employee,int companyId) throws ServiceException {
         if(employeeRepository.existsByTZAndCompanyId(employee.getTZ(), companyId))
             throw new ServiceException("the employee already exists");
+        employee.getUserCredentials().setUserType(UserType.EMPLOYEE);
         userCredentialsRepository.save(employee.getUserCredentials());
         addressRepository.save(employee.getAddress());
         companyRepository.findById(companyId).orElseThrow(()->new ServiceException("the company not found")).addEmployee(employee);

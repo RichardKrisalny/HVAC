@@ -53,4 +53,17 @@ public class CompanyService extends ServiceGlobal {
         companyRepository.findById(companyId).orElseThrow(()->new ServiceException("the company not found")).addEmployee(employee);
         return employeeRepository.save(employee);
         }
+        public Employee getEmployee(int employeeId,int companyId) throws ServiceException {
+        return employeeRepository.findByIdAndCompanyId(employeeId,companyId).orElseThrow(()->new ServiceException("the employee not found"));
+        }
+        public Employee getEmployee(String employeeTZ,int companyId) throws ServiceException {
+        return employeeRepository.findByTZAndCompanyId(employeeTZ,companyId).orElseThrow(()->new ServiceException("the employee not found"));
+        }
+        public List<Employee> getAllEmployees(int companyId)  {
+        return employeeRepository.findByCompanyId(companyId);
+        }
+        public List<Employee> getAllEmployees(int projectId,int companyId)  {
+        return employeeRepository.findByProjects_IdAndCompanyId(projectId, companyId);
+        }
+
 }

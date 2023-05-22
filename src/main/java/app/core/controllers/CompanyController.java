@@ -90,6 +90,34 @@ public class CompanyController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
+    @GetMapping(value = "/getEmployee", headers = {HttpHeaders.AUTHORIZATION})
+    public Employee getEmployee(int employeeId, HttpServletRequest req)  {
+        User user = (User) req.getAttribute("user");
+        try {
+            return companyService.getEmployee(employeeId, companyRepository.findByUserCredentials_UserName(user.getUserName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the company not found")).getId());
+        } catch (ServiceException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @GetMapping(value = "/getEmployeeByTz", headers = {HttpHeaders.AUTHORIZATION})
+    public Employee getEmployee(String employeeTZ, HttpServletRequest req)  {
+        User user = (User) req.getAttribute("user");
+        try {
+            return companyService.getEmployee(employeeTZ, companyRepository.findByUserCredentials_UserName(user.getUserName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the company not found")).getId());
+        } catch (ServiceException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @GetMapping(value = "/getAllEmployees", headers = {HttpHeaders.AUTHORIZATION})
+    public List<Employee> getAllEmployees( HttpServletRequest req)  {
+        User user = (User) req.getAttribute("user");
+        return companyService.getAllEmployees(companyRepository.findByUserCredentials_UserName(user.getUserName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the company not found")).getId());
+    }
+    @GetMapping(value = "/getAllEmployeesInProject", headers = {HttpHeaders.AUTHORIZATION})
+    public List<Employee> getAllEmployees(int projectId, HttpServletRequest req)  {
+        User user = (User) req.getAttribute("user");
+        return companyService.getAllEmployees(projectId, companyRepository.findByUserCredentials_UserName(user.getUserName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the company not found")).getId());
+    }
 }
 
 

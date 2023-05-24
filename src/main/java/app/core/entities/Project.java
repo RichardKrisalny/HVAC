@@ -20,7 +20,7 @@ public class Project {
 
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Id
-@JsonIgnore
+        @JsonIgnore
     private int id;
         @OneToOne
         @JoinColumn(name = "manager_id")
@@ -42,7 +42,7 @@ public class Project {
         @OneToMany(cascade = CascadeType.ALL)
         @JoinColumn(name = "projectId")
         @JsonIgnore
-    private List<Duct>Ducts=new ArrayList<>();
+    private List<Duct>ducts=new ArrayList<>();
         @ElementCollection
         @JsonIgnore
     private Map<String,String>blueprints=new HashMap<>();
@@ -50,5 +50,20 @@ public class Project {
         @JoinColumn(name = "client_id")
     private Client client;
     private double totalPrice;
+
+    public void addDuct(Duct duct){
+        if (ducts ==null){
+            ducts=new ArrayList<>();
+        }
+        duct.setProjectId(this.id);
+        ducts.add(duct);
+    }
+    public void addEmployee(Employee employee){
+        if (employee ==null){
+            employees=new ArrayList<>();
+        }
+        employee.addProject(this);
+        employees.add(employee);
+    }
 
 }

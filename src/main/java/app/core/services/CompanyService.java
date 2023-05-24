@@ -1,4 +1,5 @@
 package app.core.services;
+import app.core.entities.Company;
 import app.core.entities.Employee;
 import app.core.entities.Project;
 import app.core.entities.UserType;
@@ -46,12 +47,19 @@ public class CompanyService extends ServiceGlobal {
         projectRepository.deleteById(projectId);
     }
     public Employee addEmployee(Employee employee,int companyId) throws ServiceException {
-        if(employeeRepository.existsByTZAndCompanyId(employee.getTZ(), companyId))
+        if(employeeRepository.existsByIdAndCompanyId(employee.getId(), companyId))
             throw new ServiceException("the employee already exists");
         employee.getUserCredentials().setUserType(UserType.EMPLOYEE);
         userCredentialsRepository.save(employee.getUserCredentials());
         addressRepository.save(employee.getAddress());
         companyRepository.findById(companyId).orElseThrow(()->new ServiceException("the company not found")).addEmployee(employee);
+        return employeeRepository.save(employee);
+        }
+        public Employee updateEmployee(Employee employee,int companyId) throws ServiceException {
+        if(!employeeRepository.existsByIdAndCompanyId(employee.getId(), companyId))
+            throw new ServiceException("the employee "+employee.getId()+"not found");
+        userCredentialsRepository.save(employee.getUserCredentials());
+        addressRepository.save(employee.getAddress());
         return employeeRepository.save(employee);
         }
         public Employee getEmployee(int employeeId,int companyId) throws ServiceException {
@@ -65,6 +73,16 @@ public class CompanyService extends ServiceGlobal {
         }
         public List<Employee> getAllEmployees(int projectId,int companyId)  {
         return employeeRepository.findByProjects_IdAndCompanyId(projectId, companyId);
+        }
+        public void deleteEmployee (int employeeId,int companyId) throws ServiceException {
+        if(!employeeRepository.existsByIdAndCompanyId(employeeId, companyId))
+            throw new ServiceException("the employee "+employeeId+"not found");
+        employeeRepository.deleteById(employeeId);
+        }
+        public Company updateDitals(Company company,int companyId) throws ServiceException {
+            if (company.getId()!=companyId)
+                throw new ServiceException("the company "+company.getId()+"not found");
+            return companyRepository.save(company);
         }
 
 }

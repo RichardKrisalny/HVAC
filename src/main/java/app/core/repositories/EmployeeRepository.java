@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+    boolean existsByIdAndCompanyId(int id, int companyId);
     List<Employee> findByProjects_IdAndCompanyId(int id, int companyId);
     Optional<Employee> findByTZAndCompanyId(String TZ, int companyId);
     Optional<Employee> findByIdAndCompanyId(int id, int companyId);

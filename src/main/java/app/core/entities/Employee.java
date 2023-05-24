@@ -1,7 +1,7 @@
 package app.core.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
+
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -41,4 +41,10 @@ public class Employee {
 private UserCredentials userCredentials;
     @Enumerated(EnumType.STRING)
 private Role role;
+    public void addProject(Project project){
+        if (projects ==null){
+            projects=new ArrayList<>();
+        }
+        projects.add(project);
+    }
 }

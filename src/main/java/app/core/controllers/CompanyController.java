@@ -1,11 +1,10 @@
 package app.core.controllers;
+
 import app.core.entities.Employee;
 import app.core.entities.Project;
-
 import app.core.exeptions.ServiceException;
 import app.core.jwt.User;
 import app.core.repositories.CompanyRepository;
-import app.core.repositories.EmployeeRepository;
 import app.core.services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -46,10 +45,11 @@ public class CompanyController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
+
     @GetMapping(value = "/getAllProjects", headers = {HttpHeaders.AUTHORIZATION})
     public List<Project> getAllProjects(HttpServletRequest req) {
         User user = (User) req.getAttribute("user");
-       return companyService.getAllProjects(companyRepository.findByUserCredentials_UserName(user.getUserName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the company not found")).getId());
+        return companyService.getAllProjects(companyRepository.findByUserCredentials_UserName(user.getUserName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the company not found")).getId());
     }
 
     @GetMapping(value = "/getProjectByName", headers = {HttpHeaders.AUTHORIZATION})
@@ -63,10 +63,10 @@ public class CompanyController {
     }
 
     @PutMapping(value = "/updateProject", headers = {HttpHeaders.AUTHORIZATION})
-    public Project updateProject(@RequestBody Project project,@RequestParam int projectId, HttpServletRequest req) {
+    public Project updateProject(@RequestBody Project project, @RequestParam int projectId, HttpServletRequest req) {
         User user = (User) req.getAttribute("user");
         try {
-            return companyService.updateProject(project,projectId ,companyRepository.findByUserCredentials_UserName(user.getUserName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the company not found")).getId());
+            return companyService.updateProject(project, projectId, companyRepository.findByUserCredentials_UserName(user.getUserName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the company not found")).getId());
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
@@ -81,6 +81,7 @@ public class CompanyController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
     @PostMapping(value = "/addEmployee", headers = {HttpHeaders.AUTHORIZATION})
     public Employee addEmployee(@RequestBody Employee employee, HttpServletRequest req) {
         User user = (User) req.getAttribute("user");
@@ -90,34 +91,49 @@ public class CompanyController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
+
     @GetMapping(value = "/getEmployee", headers = {HttpHeaders.AUTHORIZATION})
-    public Employee getEmployee(int employeeId, HttpServletRequest req)  {
+    public Employee getEmployee(int employeeId, HttpServletRequest req) {
         User user = (User) req.getAttribute("user");
         try {
             return companyService.getEmployee(employeeId, companyRepository.findByUserCredentials_UserName(user.getUserName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the company not found")).getId());
         } catch (ServiceException e) {
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
     @GetMapping(value = "/getEmployeeByTz", headers = {HttpHeaders.AUTHORIZATION})
-    public Employee getEmployee(String employeeTZ, HttpServletRequest req)  {
+    public Employee getEmployee(String employeeTZ, HttpServletRequest req) {
         User user = (User) req.getAttribute("user");
         try {
             return companyService.getEmployee(employeeTZ, companyRepository.findByUserCredentials_UserName(user.getUserName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the company not found")).getId());
         } catch (ServiceException e) {
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
     @GetMapping(value = "/getAllEmployees", headers = {HttpHeaders.AUTHORIZATION})
-    public List<Employee> getAllEmployees( HttpServletRequest req)  {
+    public List<Employee> getAllEmployees(HttpServletRequest req) {
         User user = (User) req.getAttribute("user");
         return companyService.getAllEmployees(companyRepository.findByUserCredentials_UserName(user.getUserName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the company not found")).getId());
     }
+
     @GetMapping(value = "/getAllEmployeesInProject", headers = {HttpHeaders.AUTHORIZATION})
-    public List<Employee> getAllEmployees(int projectId, HttpServletRequest req)  {
+    public List<Employee> getAllEmployees(int projectId, HttpServletRequest req) {
         User user = (User) req.getAttribute("user");
         return companyService.getAllEmployees(projectId, companyRepository.findByUserCredentials_UserName(user.getUserName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the company not found")).getId());
     }
+
+    @DeleteMapping(value = "/deleteEmployees", headers = {HttpHeaders.AUTHORIZATION})
+    public void deleteEmployee(int employeeId, HttpServletRequest req) {
+        User user = (User) req.getAttribute("user");
+        try {
+            companyService.deleteEmployee(employeeId, companyRepository.findByUserCredentials_UserName(user.getUserName()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the company not found")).getId());
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
 }
 
 

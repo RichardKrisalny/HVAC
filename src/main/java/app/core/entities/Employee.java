@@ -1,7 +1,7 @@
 package app.core.entities;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of="id")
+@EqualsAndHashCode(of = "id")
 @Entity
 public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,17 +33,18 @@ public class Employee {
     private String image;
     private String email;
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "employees_projects",joinColumns = @JoinColumn(name = "employee_id"),inverseJoinColumns = @JoinColumn(name = "project_id"))
+    @JoinTable(name = "employees_projects", joinColumns = @JoinColumn(name = "employee_id"), inverseJoinColumns = @JoinColumn(name = "project_id"))
     @JsonIgnore
     private List<Project> projects = new ArrayList<>();
-@ManyToOne
-@JoinColumn(name = "user_credentials_id")
-private UserCredentials userCredentials;
+    @ManyToOne
+    @JoinColumn(name = "user_credentials_id")
+    private UserCredentials userCredentials;
     @Enumerated(EnumType.STRING)
-private Role role;
-    public void addProject(Project project){
-        if (projects ==null){
-            projects=new ArrayList<>();
+    private Role role;
+
+    public void addProject(Project project) {
+        if (projects == null) {
+            projects = new ArrayList<>();
         }
         projects.add(project);
     }

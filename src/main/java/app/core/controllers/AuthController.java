@@ -18,16 +18,18 @@ import javax.security.auth.message.AuthException;
 public class AuthController {
     @Autowired
     private AuthService authService;
-@PostMapping("/register")
+
+    @PostMapping("/register")
     public String register(@RequestBody Company company) throws ServiceException {
-    try {
-        return authService.register(company);
-    } catch (JsonProcessingException | AuthException e) {
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        try {
+            return authService.register(company);
+        } catch (JsonProcessingException | AuthException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
-}
+
     @PostMapping("/login")
-    public String login(@RequestBody UserCredentials userCredentials){
+    public String login(@RequestBody UserCredentials userCredentials) {
         try {
             return authService.Login(userCredentials.getUserName(), userCredentials.getPassword());
         } catch (AuthException | JsonProcessingException e) {

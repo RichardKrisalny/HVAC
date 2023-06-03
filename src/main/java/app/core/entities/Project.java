@@ -12,58 +12,60 @@ import java.util.Map;
 
 @Data
 @AllArgsConstructor
-@EqualsAndHashCode(of="id")
+@EqualsAndHashCode(of = "id")
 @Entity
 @Builder
 @NoArgsConstructor
 public class Project {
 
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Id
-        @JsonIgnore
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @JsonIgnore
     private int id;
-        @OneToOne
-        @JoinColumn(name = "manager_id")
-        @JsonIgnore
+    @OneToOne
+    @JoinColumn(name = "manager_id")
+    @JsonIgnore
     private Employee manager;
-        private String name;
+    private String name;
     private LocalDate startDate;
     private LocalDate endDate;
     private double priceForMeter;
     @JsonIgnore
     private int companyId;
-        @OneToOne
-        @JoinColumn(name = "address_id")
+    @OneToOne
+    @JoinColumn(name = "address_id")
     private Address address;
-        @ManyToMany(fetch = FetchType.LAZY)
-        @JoinTable(name = "employees_projects",joinColumns = @JoinColumn(name = "project_id"),inverseJoinColumns = @JoinColumn(name = "employee_id"))
-        @JsonIgnore
-    private List<Employee>employees=new ArrayList<>();
-        @OneToMany(cascade = CascadeType.ALL)
-        @JoinColumn(name = "projectId")
-        @JsonIgnore
-    private List<Duct>ducts=new ArrayList<>();
-        @ElementCollection
-        @JsonIgnore
-    private Map<String,String>blueprints=new HashMap<>();
-        @OneToOne
-        @JoinColumn(name = "client_id")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "employees_projects", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "employee_id"))
+    @JsonIgnore
+    private List<Employee> employees = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "projectId")
+    @JsonIgnore
+    private List<Duct> ducts = new ArrayList<>();
+    @ElementCollection
+    @JsonIgnore
+    private Map<String, String> blueprints = new HashMap<>();
+    @OneToOne
+    @JoinColumn(name = "client_id")
     private Client client;
     private double totalPrice;
 
-    public void addDuct(Duct duct){
-        if (ducts ==null){
-            ducts=new ArrayList<>();
+    public void addDuct(Duct duct) {
+        if (ducts == null) {
+            ducts = new ArrayList<>();
         }
         duct.setProjectId(this.id);
         ducts.add(duct);
     }
-    public void addEmployee(Employee employee){
-        if (employee ==null){
-            employees=new ArrayList<>();
+
+    public void addEmployee(Employee employee) {
+        if (employee == null) {
+            employees = new ArrayList<>();
         }
         employee.addProject(this);
         employees.add(employee);
     }
+
 
 }

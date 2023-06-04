@@ -63,7 +63,6 @@ public class Project {
         if (employee == null) {
             employees = new ArrayList<>();
         }
-        employee.addProject(this);
         employees.add(employee);
     }
 

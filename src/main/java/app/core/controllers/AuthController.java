@@ -28,7 +28,7 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/login")
+    @GetMapping("/login")
     public String login(@RequestBody UserCredentials userCredentials) {
         try {
             return authService.Login(userCredentials.getUserName(), userCredentials.getPassword());

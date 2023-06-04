@@ -15,14 +15,25 @@ public class ProjectService extends ServiceGlobal {
         return manager;
     }
 
-    public Employee addEmployee(Employee employee, int projectId) throws ServiceException {
-        if (!employeeRepository.existsById(employee.getId()))
-            throw new ServiceException("the Employee " + employee.getId() + " not found");
-        Project project = projectRepository.findById(projectId).orElseThrow(() -> new ServiceException("the project " + projectId + " not found"));
+    public Employee addEmployee(int employeeId, int projectId, int companyId) throws ServiceException {
+        if (!employeeRepository.existsById(employeeId))
+            throw new ServiceException("the Employee " + employeeId + " not found");
+        Project project = getProject(projectId);
+        Employee employee = getEmployee(employeeId, companyId);
         if (project.getCompanyId() != employee.getCompanyId())
             throw new ServiceException("the Employee work in other company");
         project.addEmployee(employee);
+        projectRepository.save(project);
+        System.out.println(getEmployee(employeeId, companyId).getProjects());
+        System.out.println(getProject(projectId).getEmployees());
         return employee;
+    }
+
+    public void removeEmployee(int employeeId, int projectId) throws ServiceException {
+        if (!employeeRepository.existsById(employeeId))
+            throw new ServiceException("the Employee " + employeeId + " not found");
+        projectRepository.findById(projectId).orElseThrow(() -> new ServiceException("the project " + projectId + " not found")).getEmployees().removeIf((e) -> e.getId() == employeeId);
+
     }
 
     public Duct addDuct(Duct duct, int projectId) throws ServiceException {
@@ -78,5 +89,13 @@ public class ProjectService extends ServiceGlobal {
 
     public void deleteBlueprint(String name, int projectId) throws ServiceException {
         projectRepository.findById(projectId).orElseThrow(() -> new ServiceException("the project " + projectId + " not found")).getBlueprints().remove(name);
+    }
+
+    public Project getProject(int projectId) throws ServiceException {
+        return projectRepository.findById(projectId).orElseThrow(() -> new ServiceException("the project " + projectId + " not found"));
+    }
+
+    public Employee getEmployee(int employeeId, int companyId) throws ServiceException {
+        return employeeRepository.findByIdAndCompanyId(employeeId, companyId).orElseThrow(() -> new ServiceException("the employee " + employeeId + " not found"));
     }
 }

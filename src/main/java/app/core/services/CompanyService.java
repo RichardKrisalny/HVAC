@@ -22,6 +22,7 @@ public class CompanyService extends ServiceGlobal {
     public Project addProject(Project project, int companyId) throws ServiceException {
         if (projectRepository.existsByNameAndCompanyId(project.getName(), companyId))
             throw new ServiceException("the company all ready have project with this name---" + project.getName());
+        project.getClient().getUserCredentials().setUserType(UserType.CUSTOMER);
         userCredentialsRepository.save(project.getClient().getUserCredentials());
         addressRepository.save(project.getClient().getAddress());
         addressRepository.save(project.getAddress());

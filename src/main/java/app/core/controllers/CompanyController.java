@@ -1,5 +1,6 @@
 package app.core.controllers;
 
+import app.core.entities.Duct;
 import app.core.entities.Employee;
 import app.core.entities.Project;
 import app.core.exeptions.ServiceException;
@@ -133,6 +134,33 @@ public class CompanyController {
     public Employee addEmployeeToProject(int employeeId, int projectId, HttpServletRequest req) {
         try {
             return projectService.addEmployee(employeeId, projectId, companyService.getCompany((User) req.getAttribute("user")).getId());
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @DeleteMapping(value = "/removeEmployeeFromProject", headers = {HttpHeaders.AUTHORIZATION})
+    public void removeEmployeeFromProject(int employeeId, int projectId, HttpServletRequest req) {
+        try {
+            projectService.removeEmployee(employeeId, projectId, companyService.getCompany((User) req.getAttribute("user")).getId());
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @PostMapping(value = "/addDuct", headers = {HttpHeaders.AUTHORIZATION})
+    public Duct addDuct(Duct duct, int projectId, HttpServletRequest req) {
+        try {
+            return projectService.addDuct(duct, projectId, companyService.getCompany((User) req.getAttribute("user")).getId());
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @DeleteMapping(value = "/deleteDuct", headers = {HttpHeaders.AUTHORIZATION})
+    public void deleteDuct(int ductId, int projectId, HttpServletRequest req) {
+        try {
+            projectService.deleteDuct(ductId, projectId, companyService.getCompany((User) req.getAttribute("user")).getId());
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }

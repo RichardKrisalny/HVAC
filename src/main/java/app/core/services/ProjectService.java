@@ -38,12 +38,15 @@ public class ProjectService extends ServiceGlobal {
     }
 
     public void deleteDuct(int ductId, int projectId, int companyId) throws ServiceException {
-        getProject(projectId, companyId).getDucts().removeIf((d) -> d.getId() == ductId);
+        getProject(projectId, companyId);
+        getDuct(ductId, projectId);
+        ductRepository.deleteById(ductId);
     }
 
-    public Duct updateDuct(Duct duct, int projectId) throws ServiceException {
-        ductRepository.findByProjectIdAndId(projectId, duct.getId()).orElseThrow(() -> new ServiceException("the duct " + duct.getId() + " not found"));
-        return ductRepository.save(duct);
+    public Duct updateDuct(int ductId, Duct duct, int projectId) throws ServiceException {
+        ductRepository.findByProjectIdAndId(projectId, ductId).orElseThrow(() -> new ServiceException("the duct " + duct.getId() + " not found"));
+        duct.setId(ductId);
+        return ductRepository.save(duct);//ERROR
     }
 
     public Duct getDuct(int ductId, int projectId) throws ServiceException {
@@ -79,7 +82,8 @@ public class ProjectService extends ServiceGlobal {
     }
 
     public String addBlueprint(String name, String file, int projectId, int companyId) throws ServiceException {
-        getProject(projectId, companyId).getBlueprints().put(name, file);
+        getProject(projectId, companyId).addBlueprint(name, file);
+        projectRepository.save(getProject(projectId, companyId));
         return name;
     }
 

@@ -146,8 +146,17 @@ public class CompanyController {
         }
     }
 
-    @PostMapping(value = "/addDuct", headers = {HttpHeaders.AUTHORIZATION})
-    public Duct addDuct(Duct duct, int projectId, HttpServletRequest req) {
+    @PostMapping(value = "/addSquareDuct", headers = {HttpHeaders.AUTHORIZATION})
+    public Duct addDuct(SquareDuct duct, int projectId, HttpServletRequest req) {
+        try {
+            return projectService.addDuct(duct, projectId, companyService.getCompany((User) req.getAttribute("user")).getId());
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @PostMapping(value = "/addCircularDuct", headers = {HttpHeaders.AUTHORIZATION})
+    public Duct addDuct(CircularDuct duct, int projectId, HttpServletRequest req) {
         try {
             return projectService.addDuct(duct, projectId, companyService.getCompany((User) req.getAttribute("user")).getId());
         } catch (ServiceException e) {
@@ -165,10 +174,10 @@ public class CompanyController {
     }
 
     @PutMapping(value = "/updateDuct", headers = {HttpHeaders.AUTHORIZATION})
-    public Duct updateDuct(Duct duct, int projectId, HttpServletRequest req) {
+    public Duct updateDuct(int ductId, Duct duct, int projectId, HttpServletRequest req) {
         try {
             projectService.getProject(projectId, companyService.getCompany((User) req.getAttribute("user")).getId());
-            return projectService.updateDuct(duct, projectId);
+            return projectService.updateDuct(ductId, duct, projectId);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }

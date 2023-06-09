@@ -66,5 +66,12 @@ public class Project {
         employees.add(employee);
     }
 
+    public void addBlueprint(String name, String file) {
+        if (blueprints == null) {
+            blueprints = new HashMap<>();
+        }
+        blueprints.put(name, file);
+    }
+
 
 }

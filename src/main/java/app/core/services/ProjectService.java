@@ -22,8 +22,6 @@ public class ProjectService extends ServiceGlobal {
             throw new ServiceException("the Employee work in other company");
         project.addEmployee(employee);
         projectRepository.save(project);
-//        System.out.println(getEmployee(employeeId, companyId).getProjects());
-//        System.out.println(getProject(projectId,companyId).getEmployees());
         return employee;
     }
 

@@ -1,8 +1,6 @@
 package app.core.controllers;
 
-import app.core.entities.Duct;
-import app.core.entities.Employee;
-import app.core.entities.Project;
+import app.core.entities.*;
 import app.core.exeptions.ServiceException;
 import app.core.jwt.User;
 import app.core.services.CompanyService;
@@ -165,6 +163,115 @@ public class CompanyController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
+    @PutMapping(value = "/updateDuct", headers = {HttpHeaders.AUTHORIZATION})
+    public Duct updateDuct(Duct duct, int projectId, HttpServletRequest req) {
+        try {
+            projectService.getProject(projectId, companyService.getCompany((User) req.getAttribute("user")).getId());
+            return projectService.updateDuct(duct, projectId);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/getDuct", headers = {HttpHeaders.AUTHORIZATION})
+    public Duct getDuct(int ductId, int projectId, HttpServletRequest req) {
+        try {
+            projectService.getProject(projectId, companyService.getCompany((User) req.getAttribute("user")).getId());
+            return projectService.getDuct(ductId, projectId);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/getDuctByColor", headers = {HttpHeaders.AUTHORIZATION})
+    public List<Duct> getDuctByColor(String color, int projectId, HttpServletRequest req) {
+        try {
+            projectService.getProject(projectId, companyService.getCompany((User) req.getAttribute("user")).getId());
+            return projectService.getDuctsByColor(projectId, color);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/getAllDuctsByConnectionType", headers = {HttpHeaders.AUTHORIZATION})
+    public List<Duct> getAllDuctsByConnectionType(ConnectionType connectionType, int projectId, HttpServletRequest req) {
+        try {
+            projectService.getProject(projectId, companyService.getCompany((User) req.getAttribute("user")).getId());
+            return projectService.getAllDuctsByConnectionType(projectId, connectionType);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/getAllDucts", headers = {HttpHeaders.AUTHORIZATION})
+    public List<Duct> getAllDucts(int projectId, HttpServletRequest req) {
+        try {
+            projectService.getProject(projectId, companyService.getCompany((User) req.getAttribute("user")).getId());
+            return projectService.getAllDucts(projectId);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/getAllDoneDucts", headers = {HttpHeaders.AUTHORIZATION})
+    public List<Duct> getAllDoneDucts(boolean isDone, int projectId, HttpServletRequest req) {
+        try {
+            projectService.getProject(projectId, companyService.getCompany((User) req.getAttribute("user")).getId());
+            return projectService.getAllDoneDucts(projectId, isDone);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/getDuctsByShape", headers = {HttpHeaders.AUTHORIZATION})
+    public List<Duct> getDuctsByShape(Shape shape, int projectId, HttpServletRequest req) {
+        try {
+            projectService.getProject(projectId, companyService.getCompany((User) req.getAttribute("user")).getId());
+            return projectService.getDuctsByShape(projectId, shape);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/getAllDuctsByThick", headers = {HttpHeaders.AUTHORIZATION})
+    public List<Duct> getAllDuctsByThick(double thick, int projectId, HttpServletRequest req) {
+        try {
+            projectService.getProject(projectId, companyService.getCompany((User) req.getAttribute("user")).getId());
+            return projectService.getAllDuctsByThick(projectId, thick);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/getAllDuctsBySteelType", headers = {HttpHeaders.AUTHORIZATION})
+    public List<Duct> getAllDuctsBySteelType(SteelType steelType, int projectId, HttpServletRequest req) {
+        try {
+            projectService.getProject(projectId, companyService.getCompany((User) req.getAttribute("user")).getId());
+            return projectService.getAllDuctsBySteelType(projectId, steelType);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @PostMapping(value = "/addBlueprint", headers = {HttpHeaders.AUTHORIZATION})
+    public String addBlueprint(String name, String file, int projectId, HttpServletRequest req) {
+        try {
+            return projectService.addBlueprint(name, file, projectId, companyService.getCompany((User) req.getAttribute("user")).getId());
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @DeleteMapping(value = "/deleteBlueprint", headers = {HttpHeaders.AUTHORIZATION})
+    public void deleteBlueprint(String name, int projectId, HttpServletRequest req) {
+        try {
+            projectService.deleteBlueprint(name, projectId, companyService.getCompany((User) req.getAttribute("user")).getId());
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
 
 }
 

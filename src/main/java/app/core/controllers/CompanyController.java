@@ -87,6 +87,15 @@ public class CompanyController {
         }
     }
 
+    @PutMapping(value = "/updateEmployee", headers = {HttpHeaders.AUTHORIZATION})
+    public Employee updateEmployee(@RequestBody Employee employee, HttpServletRequest req) {
+        try {
+            return companyService.updateEmployee(employee, companyService.getCompany((User) req.getAttribute("user")).getId());
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
     @GetMapping(value = "/getEmployee", headers = {HttpHeaders.AUTHORIZATION})
     public Employee getEmployee(int employeeId, HttpServletRequest req) {
 

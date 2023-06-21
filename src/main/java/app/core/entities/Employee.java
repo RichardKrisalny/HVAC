@@ -39,6 +39,7 @@ public class Employee {
     @ManyToOne
     @JoinColumn(name = "user_credentials_id")
     private UserCredentials userCredentials;
+    
     @Enumerated(EnumType.STRING)
     private Role role;
 

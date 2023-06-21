@@ -8,11 +8,18 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProjectRepository extends JpaRepository<Project, Integer> {
+    List<Project> findByClient_Id(int id);
+
     boolean existsByIdAndCompanyId(int id, int companyId);
+
     Optional<Project> findByNameAndCompanyId(String name, int companyId);
+
     Optional<Project> findByIdAndCompanyId(int id, int companyId);
+
     boolean existsByNameAndCompanyId(String name, int companyId);
+
     boolean existsByName(String name);
+
     List<Project> findByCompanyIdAndManager_Address_City(int companyId, String city);
 
     List<Project> findByCompanyId(int companyId);
@@ -20,6 +27,7 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
     Optional<Project> findByName(String name);
 
     List<Project> findByStartDateBetweenAndManager_CompanyId(LocalDate startDateStart, LocalDate startDateEnd, int companyId);
+
     List<Project> findByEndDateBetweenAndManager_CompanyId(LocalDate startDateStart, LocalDate startDateEnd, int companyId);
 
     @Override

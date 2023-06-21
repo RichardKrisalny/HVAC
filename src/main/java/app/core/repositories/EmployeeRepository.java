@@ -8,11 +8,18 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+    Optional<Employee> findByUserCredentials_UserName(String userName);
+
     boolean existsByIdAndCompanyId(int id, int companyId);
+
     List<Employee> findByProjects_IdAndCompanyId(int id, int companyId);
+
     Optional<Employee> findByTZAndCompanyId(String TZ, int companyId);
+
     Optional<Employee> findByIdAndCompanyId(int id, int companyId);
+
     boolean existsByTZAndCompanyId(String TZ, int companyId);
+
     List<Employee> findByCompanyId(int companyId);
 
     Optional<Employee> findByName(String name);

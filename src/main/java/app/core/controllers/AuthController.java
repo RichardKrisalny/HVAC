@@ -14,7 +14,7 @@ import javax.security.auth.message.AuthException;
 
 @CrossOrigin
 @RestController
-@RequestMapping
+@RequestMapping("/auth")
 public class AuthController {
     @Autowired
     private AuthService authService;

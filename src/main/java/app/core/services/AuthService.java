@@ -20,6 +20,7 @@ public class AuthService extends ServiceGlobal {
     private User user;
 
     public String Login(String userName, String password) throws AuthException, JsonProcessingException {
+        System.out.println(userName + "  " + password);
         if (Objects.equals(userName, "admin") && Objects.equals(password, "admin")) {
             user.setUserName("admin");
             user.setUserType(UserType.ADMIN);
